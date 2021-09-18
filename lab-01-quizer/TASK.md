@@ -341,7 +341,7 @@ class TextTask implements Task {
 ## Добавляем абстракций
 Для всего в этом пункте следует сделать пакет `math_tasks` в пакете `tasks` и `math_task_generators` в пакете `task_genertors`.
 
-Давайте теперь сделаем `ExpressionMathTask` и `EquationMathTask` двух видов - целочисленные (Integer) и десятично-дробные (Real). Для этого введем несколько более сложную систему абстракций. 
+Сейчас `ExpressionTask` и `EquationTask` наследуются напрямую от `Task`. Введем несколько абстракций, чтобы вынести общую логику из этих двух классов.
 
 >Я опишу иерархию для `Task`, такую же нужно повторить для `TaskGenerator`
 
@@ -386,17 +386,17 @@ interface MathTask extends Task {
 }
 
 abstract class AbstractMathTask implements Task {
-    abstract class Generator implements MathTask.Generator { /* ... */ }
+    static abstract class Generator implements MathTask.Generator { /* ... */ }
     // ...
 }
 
 class ExpressionTask extends AbstractMathTask {
-    class Generator extends AbstractMathTask.Generator { /* ... */ }
+    static class Generator extends AbstractMathTask.Generator { /* ... */ }
     // ...
 }
 
 class EquationTask extends AbstractMathTask {
-    class Generator extends AbstractMathTask.Generator { /* ... */ }
+    static class Generator extends AbstractMathTask.Generator { /* ... */ }
     // ...
 }
 ```
