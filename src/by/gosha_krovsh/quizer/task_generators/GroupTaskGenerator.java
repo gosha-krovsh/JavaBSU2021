@@ -1,17 +1,16 @@
 package by.gosha_krovsh.quizer.task_generators;
 
 import by.gosha_krovsh.quizer.Task;
-import by.gosha_krovsh.quizer.TaskGenerator;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GroupTaskGenerator implements TaskGenerator {
-    public GroupTaskGenerator(TaskGenerator... taskGenerators) {
+public class GroupTaskGenerator implements Task.Generator {
+    public GroupTaskGenerator(Task.Generator... taskGenerators) {
         this.taskGenerators = List.of(taskGenerators);
     }
 
-    public GroupTaskGenerator(List<TaskGenerator> taskGenerators) {
+    public GroupTaskGenerator(List<Task.Generator> taskGenerators) {
         this.taskGenerators = taskGenerators;
     }
 
@@ -25,5 +24,5 @@ public class GroupTaskGenerator implements TaskGenerator {
         return taskGenerators.get(index).generate();
     }
 
-    private final List<TaskGenerator> taskGenerators;
+    private final List<Task.Generator> taskGenerators;
 }
