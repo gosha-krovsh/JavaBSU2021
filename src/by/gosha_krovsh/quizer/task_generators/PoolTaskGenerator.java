@@ -1,6 +1,7 @@
 package by.gosha_krovsh.quizer.task_generators;
 
 import by.gosha_krovsh.quizer.Task;
+import by.gosha_krovsh.quizer.exceptions.TaskPoolEmpty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class PoolTaskGenerator implements Task.Generator {
     @Override
     public Task generate() throws RuntimeException {
         if (tasks.size() == 0) {
-            throw new RuntimeException("No Tasks left");
+            throw new TaskPoolEmpty("Pool of tasks is empty");
         }
 
         int index = ThreadLocalRandom.current().nextInt(0, this.tasks.size());

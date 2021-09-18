@@ -13,6 +13,14 @@ public abstract class AbstractMathTask implements MathTask {
     public static abstract class Generator implements MathTask.Generator {
         public Generator(int precision, double minNumber, double maxNumber,
                          EnumSet<Operator> operatorsToUse) {
+            if (precision < 0) {
+                throw new IllegalArgumentException("Precision can't be below 0");
+            }
+            if (minNumber > maxNumber) {
+                throw  new IllegalArgumentException(
+                        "maxNumber must be bigger than minNumber");
+            }
+
             this.precision = precision;
             this.minNumber = minNumber;
             this.maxNumber = maxNumber;

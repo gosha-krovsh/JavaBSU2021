@@ -1,5 +1,6 @@
 package by.gosha_krovsh.quizer;
 
+import by.gosha_krovsh.quizer.exceptions.QuizNotFinishedException;
 import by.gosha_krovsh.quizer.task_generators.GroupTaskGenerator;
 import by.gosha_krovsh.quizer.task_generators.PoolTaskGenerator;
 import by.gosha_krovsh.quizer.tasks.TextTask;
@@ -92,7 +93,7 @@ public class Quiz {
 
     public double getMark() throws RuntimeException {
         if (taskCount > 0) {
-            throw new RuntimeException("Quiz is not finished");
+            throw new QuizNotFinishedException("Quiz must be finished to get Mark");
         }
 
         return 1. * correctAnswerNumber / (correctAnswerNumber + wrongAnswerNumber);
