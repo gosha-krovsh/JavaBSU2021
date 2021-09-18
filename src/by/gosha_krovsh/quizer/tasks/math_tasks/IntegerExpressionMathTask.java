@@ -2,6 +2,7 @@ package by.gosha_krovsh.quizer.tasks.math_tasks;
 
 import by.gosha_krovsh.quizer.Operator;
 
+@Deprecated(forRemoval = true)
 public class IntegerExpressionMathTask extends ExpressionMathTask implements IntegerMathTask {
     public IntegerExpressionMathTask(int leftNumber, int rightNumber, Operator operator) {
         this.leftNumber = leftNumber;

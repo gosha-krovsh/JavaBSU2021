@@ -7,6 +7,7 @@ import by.gosha_krovsh.quizer.tasks.math_tasks.IntegerEquationMathTask;
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Deprecated(forRemoval = true)
 public class IntegerEquationMathTaskGenerator
         extends EquationMathTaskGenerator implements IntegerMathTaskGenerator {
     public IntegerEquationMathTaskGenerator(int minNumber, int maxNumber,

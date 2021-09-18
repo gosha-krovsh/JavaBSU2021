@@ -3,11 +3,16 @@ package by.gosha_krovsh.quizer.task_generators;
 import by.gosha_krovsh.quizer.Operator;
 import by.gosha_krovsh.quizer.Task;
 import by.gosha_krovsh.quizer.TaskGenerator;
-import by.gosha_krovsh.quizer.tasks.EquationTask;
+import by.gosha_krovsh.quizer.tasks.math_tasks.EquationTask;
 
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @deprecated
+ * <p> Use {@link EquationTask.Generator}</p>
+ * */
+@Deprecated(forRemoval = true)
 public class EquationTaskGenerator implements TaskGenerator {
     public EquationTaskGenerator(int minNumber, int maxNumber,
                                  EnumSet<Operator> operatorsToUse) {
@@ -23,7 +28,7 @@ public class EquationTaskGenerator implements TaskGenerator {
         int operatorIndex = ThreadLocalRandom.current().nextInt(0, this.operatorsToUse.size());
 
         Operator[] operatorArray = operatorsToUse.toArray(new Operator[0]);
-        return new EquationTask(leftNumber, rightNumber, operatorArray[operatorIndex]);
+        return new EquationTask(0, leftNumber, rightNumber, operatorArray[operatorIndex]);
     }
 
     private final EnumSet<Operator> operatorsToUse;

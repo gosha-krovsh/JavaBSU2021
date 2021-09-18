@@ -5,6 +5,7 @@ import by.gosha_krovsh.quizer.Operator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Deprecated(forRemoval = true)
 public class RealExpressionMathTask extends ExpressionMathTask implements RealMathTask {
     public RealExpressionMathTask(int precision, double leftNumber, double rightNumber, Operator operator) {
         this.precision = precision;
@@ -51,11 +52,6 @@ public class RealExpressionMathTask extends ExpressionMathTask implements RealMa
         return BigDecimal.valueOf(result)
                 .setScale(this.precision, RoundingMode.HALF_UP)
                 .doubleValue();
-    }
-
-    @Override
-    protected String getAnswerRegex() {
-        return "^\\+?\\-?(\\d+[\\.]?([\\d]{" + precision + "})?)$";
     }
 
     private final int precision;

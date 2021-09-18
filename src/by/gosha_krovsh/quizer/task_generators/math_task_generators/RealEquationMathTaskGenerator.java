@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Deprecated(forRemoval = true)
 public class RealEquationMathTaskGenerator extends EquationMathTaskGenerator implements RealMathTaskGenerator {
     public RealEquationMathTaskGenerator(int precision, double minNumber, double maxNumber,
                                          EnumSet<Operator> operatorsToUse) {
