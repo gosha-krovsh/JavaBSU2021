@@ -12,6 +12,9 @@ public interface DoubleStringConverter {
                 .toString();
     }
 
+    /**
+     * By Default 0 precision means only integer part is put into String
+     */
     static boolean isDoubleStringCorrect(int precision,
                                          String string) {
         Pattern pattern = Pattern.compile("^\\+?\\-?(\\d+[\\.]?([\\d]{" + precision + "})?)$");

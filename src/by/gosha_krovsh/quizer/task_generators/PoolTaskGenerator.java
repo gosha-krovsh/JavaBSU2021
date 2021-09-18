@@ -2,13 +2,15 @@ package by.gosha_krovsh.quizer.task_generators;
 
 import by.gosha_krovsh.quizer.Task;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PoolTaskGenerator implements Task.Generator {
     public PoolTaskGenerator(boolean allowDuplicate, Task... tasks) {
         this.allowDuplicate = allowDuplicate;
-        this.tasks = List.of(tasks);
+        this.tasks = new ArrayList<>(Arrays.asList(tasks));
     }
 
     public PoolTaskGenerator(boolean allowDuplicate, List<Task> tasks) {

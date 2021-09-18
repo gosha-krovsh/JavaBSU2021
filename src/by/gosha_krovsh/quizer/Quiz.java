@@ -13,7 +13,7 @@ public class Quiz {
     static HashMap<String, Quiz> getQuizMap() {
         HashMap<String, Quiz> map = new HashMap<>();
         // TextTask
-        PoolTaskGenerator poolTaskGenerator = new PoolTaskGenerator(true,
+        PoolTaskGenerator poolTaskGenerator = new PoolTaskGenerator(false,
                 new TextTask("Да?", "Да"),
                 new TextTask("Нет?", "Нет"));
         Quiz textQuiz = new Quiz(poolTaskGenerator, 2);
