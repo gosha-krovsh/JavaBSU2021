@@ -35,13 +35,13 @@ public class Quiz {
         EquationTask.Generator realEquationMathTaskGenerator =
                 new EquationTask.Generator(2, 1, 10, EnumSet.of(Operator.MINUS));
         Quiz realEquationQuiz = new Quiz(realEquationMathTaskGenerator, 1);
-        map.put("RealEquationMathTask", realEquationQuiz);
+        map.put("RealEquationTask", realEquationQuiz);
 
         // RealExpressionTask
         ExpressionTask.Generator realExpressionMathTaskGenerator =
                 new ExpressionTask.Generator(3, 1, 10, EnumSet.of(Operator.MULTIPLY));
         Quiz realExpressionQuiz = new Quiz(realExpressionMathTaskGenerator, 1);
-        map.put("RealExpressionMathTask", realExpressionQuiz);
+        map.put("RealExpressionTask", realExpressionQuiz);
 
         // GroupTaskGenerator
         GroupTaskGenerator groupTaskGenerator =

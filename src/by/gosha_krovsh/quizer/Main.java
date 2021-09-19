@@ -6,8 +6,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         HashMap<String, Quiz> quizMap = Quiz.getQuizMap();
-        Scanner scanner = new Scanner(System.in);
+        for (var name : quizMap.keySet()) {
+            System.out.println(name);
+        }
 
+        Scanner scanner = new Scanner(System.in);
         String quizName;
         do {
             System.out.println("Введите название теста...");
@@ -20,7 +23,7 @@ public class Main {
             System.out.println(task.getText());
 
             String answer = scanner.nextLine();
-            quiz.provideAnswer(answer);
+            System.out.println(quiz.provideAnswer(answer));
         }
         System.out.println(quiz.getMark());
     }

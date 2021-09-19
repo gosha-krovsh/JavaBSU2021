@@ -17,7 +17,7 @@ public abstract class AbstractMathTask implements MathTask {
                 throw new IllegalArgumentException("Precision can't be below 0");
             }
             if (minNumber > maxNumber) {
-                throw  new IllegalArgumentException(
+                throw new IllegalArgumentException(
                         "maxNumber must be bigger than minNumber");
             }
 
@@ -67,11 +67,12 @@ public abstract class AbstractMathTask implements MathTask {
 
     @Override
     public Result validate(String answer) {
-        if (DoubleStringConverter.isDoubleStringCorrect(precision, answer)) {
+        if (!DoubleStringConverter.isDoubleStringCorrect(precision, answer)) {
             return Result.INCORRECT_INPUT;
         }
 
-        return answer.equals(this.answer) ? Result.OK : Result.WRONG;
+        return DoubleStringConverter.correctDoubleStringPrecision(precision, answer)
+                .equals(this.answer) ? Result.OK : Result.WRONG;
     }
 
     protected String text;
