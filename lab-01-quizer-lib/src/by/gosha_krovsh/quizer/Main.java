@@ -1,9 +1,12 @@
 package by.gosha_krovsh.quizer;
 
+/* TEST CODE
 import java.util.HashMap;
 import java.util.Scanner;
+ */
 
 public class Main {
+    /* TEST CODE, LEFT HERE TO SAVE IT
     public static void main(String[] args) {
         HashMap<String, Quiz> quizMap = Quiz.getQuizMap();
         for (var name : quizMap.keySet()) {
@@ -27,4 +30,5 @@ public class Main {
         }
         System.out.println(quiz.getMark());
     }
+    */
 }

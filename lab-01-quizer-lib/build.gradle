@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main(({
+        java {
+            srcDirs = ['src']
+        }
+    }))
+}
+
+tasks.register('publishOnGitPush') {
+    // TODO(George) Add logic
+    group = "custom"
+    description = 'Publishes changes to github packages'
+}
