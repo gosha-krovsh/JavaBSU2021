@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Scanner;
  */
 
+@Deprecated
 public class Main {
     /* TEST CODE, LEFT HERE TO SAVE IT
     public static void main(String[] args) {

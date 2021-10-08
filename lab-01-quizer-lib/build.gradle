@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 group 'org.example'
@@ -9,16 +10,30 @@ repositories {
     mavenCentral()
 }
 
+publishing {
+    group = 'github'
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/gosha-krovsh/JavaBSU2021")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+// TO BUILD
 sourceSets {
     main(({
         java {
             srcDirs = ['src']
         }
     }))
-}
-
-tasks.register('publishOnGitPush') {
-    // TODO(George) Add logic
-    group = "custom"
-    description = 'Publishes changes to github packages'
 }

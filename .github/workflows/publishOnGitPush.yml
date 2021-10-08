@@ -19,6 +19,5 @@ jobs:
     - uses: gradle/gradle-build-action@v2
       with:
         build-root-directory: ./lab-01-quizer-lib
-        arguments: publishOnGitPush
-        
+        arguments: publish    
           
