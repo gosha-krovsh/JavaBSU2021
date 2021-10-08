@@ -5,6 +5,11 @@ on:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
+
+env:
+  PUBLISH_USERNAME: ${{ secrets.PUBLISH_USERNAME }}
+  PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}    
+    
 jobs:
   gradle:
     strategy:
