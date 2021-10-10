@@ -3,15 +3,14 @@ plugins {
     id 'maven-publish'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'by.gosha-krovsh'
+version '1.0.0'
 
 repositories {
     mavenCentral()
 }
 
 publishing {
-    group = 'github'
     repositories {
         maven {
             name = "GitHubPackages"
