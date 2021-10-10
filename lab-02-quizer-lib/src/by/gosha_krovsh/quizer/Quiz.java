@@ -11,7 +11,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 
 public class Quiz {
-    static HashMap<String, Quiz> getQuizMap() {
+    public static HashMap<String, Quiz> getQuizMap() {
         HashMap<String, Quiz> map = new HashMap<>();
         // TextTask
         PoolTaskGenerator poolTaskGenerator = new PoolTaskGenerator(false,
@@ -52,12 +52,12 @@ public class Quiz {
         return map;
     }
 
-    Quiz(Task.Generator generator, int taskCount) {
+    public Quiz(Task.Generator generator, int taskCount) {
         this.generator = generator;
         this.taskCount = taskCount;
     }
 
-    Task nextTask() throws RuntimeException {
+    public Task nextTask() throws RuntimeException {
         if (taskCount == 0) {
             throw new RuntimeException("Quiz is finished");
         }
@@ -69,7 +69,7 @@ public class Quiz {
         return currentTask;
     }
 
-    Result provideAnswer(String answer) {
+    public Result provideAnswer(String answer) {
         Result result = currentTask.validate(answer);
         switch (result) {
             case OK: {
