@@ -102,6 +102,7 @@ public class Quiz {
         return 1. * correctAnswerNumber / (correctAnswerNumber + wrongAnswerNumber);
     }
 
+    /** @since 1.0.1 */
     public List<Outcome> getOutcomes() {
         return outcomes;
     }
