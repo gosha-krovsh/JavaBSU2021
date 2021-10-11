@@ -3,7 +3,7 @@ package by.gosha_krovsh.quizer;
 /* TEST CODE
 import java.util.HashMap;
 import java.util.Scanner;
- */
+*/
 
 @Deprecated
 public class Main {
@@ -29,6 +29,7 @@ public class Main {
             String answer = scanner.nextLine();
             System.out.println(quiz.provideAnswer(answer));
         }
+        quiz.getOutcomes().forEach(System.out::println);
         System.out.println(quiz.getMark());
     }
     */

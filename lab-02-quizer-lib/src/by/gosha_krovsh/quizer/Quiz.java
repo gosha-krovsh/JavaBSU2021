@@ -7,8 +7,10 @@ import by.gosha_krovsh.quizer.tasks.TextTask;
 import by.gosha_krovsh.quizer.tasks.math_tasks.EquationTask;
 import by.gosha_krovsh.quizer.tasks.math_tasks.ExpressionTask;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 
 public class Quiz {
     public static HashMap<String, Quiz> getQuizMap() {
@@ -88,6 +90,7 @@ public class Quiz {
                 break;
             }
         }
+        outcomes.add(new Outcome(currentTask.getText(), answer, result));
         return result;
     }
 
@@ -97,6 +100,10 @@ public class Quiz {
         }
 
         return 1. * correctAnswerNumber / (correctAnswerNumber + wrongAnswerNumber);
+    }
+
+    public List<Outcome> getOutcomes() {
+        return outcomes;
     }
 
     public boolean isFinished() {
@@ -124,4 +131,6 @@ public class Quiz {
 
     private final Task.Generator generator;
     private int taskCount;
+
+    private final List<Outcome> outcomes = new ArrayList<>();
 }
