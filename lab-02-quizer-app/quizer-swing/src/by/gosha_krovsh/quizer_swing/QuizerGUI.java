@@ -23,11 +23,11 @@ public class QuizerGUI extends JFrame {
         container.setLayout(new GridLayout(6, 1));
 
         container.add(comboQuizBox);
+        container.add(startButton);
         container.add(questionLabel);
         container.add(resultLabel);
         container.add(answerField);
         container.add(provideAnswerButton);
-        container.add(startButton);
     }
 
     private void setButtons() {
@@ -46,8 +46,15 @@ public class QuizerGUI extends JFrame {
                 Result result = currentQuiz.provideAnswer(answerField.getText());
                 resultLabel.setText("Verification showed: " + result.toString());
                 if (currentQuiz.isFinished()) {
-                    JOptionPane.showMessageDialog(null,
-                            Double.toString(currentQuiz.getMark()));
+                    StringBuilder outcomeStringBuilder = new StringBuilder();
+                    currentQuiz.getOutcomes().forEach(outcome -> {
+                        outcomeStringBuilder
+                                .append(outcome)
+                                .append("\n");
+                    });
+
+                    outcomeStringBuilder.append(currentQuiz.getMark());
+                    JOptionPane.showMessageDialog(null, outcomeStringBuilder.toString());
                     ClearFields();
                     currentQuiz = null;
                 } else {
@@ -72,12 +79,13 @@ public class QuizerGUI extends JFrame {
     }
 
     private final HashMap<String, Quiz> quizMap = Quiz.getQuizMap();
-    private Quiz currentQuiz;
+    // 'null' means Quiz hasn't been chosen
+    private Quiz currentQuiz = null;
 
-    private JComboBox<String> comboQuizBox = new JComboBox<>();
-    private JLabel questionLabel = new JLabel("Question: ");
-    private JLabel resultLabel = new JLabel("Verification showed: ");
-    private JTextField answerField = new JTextField("", 10);
-    private JButton provideAnswerButton = new JButton("Provide Answer");
-    private JButton startButton = new JButton("Start");
+    private final JComboBox<String> comboQuizBox = new JComboBox<>();
+    private final JLabel questionLabel = new JLabel("Question: ");
+    private final JLabel resultLabel = new JLabel("Verification showed: ");
+    private final JTextField answerField = new JTextField("", 10);
+    private final JButton provideAnswerButton = new JButton("Provide Answer");
+    private final JButton startButton = new JButton("Start");
 }
