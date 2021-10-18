@@ -2,6 +2,8 @@ package by.gosha_krovsh.monitoring;
 
 import by.derovi.service_monitoring.visualizer.Table;
 import by.derovi.service_monitoring.visualizer.TerminalRenderer;
+import by.gosha_krovsh.monitoring.collections.SortedCollection;
+import by.gosha_krovsh.monitoring.collections.TableViewCollection;
 import by.zhabdex.common.Service;
 import by.zhabdex.common.Tools;
 
@@ -10,6 +12,7 @@ import java.net.URL;
 import java.util.List;
 
 public class Main {
+    @Deprecated
     static Table generateTableRow(List<Service> services) {
         Table table = new Table("Services");
         table.addRow("Name",
@@ -32,21 +35,44 @@ public class Main {
         return table;
     }
 
+    static List<Service> fetchServices() throws IOException {
+        return Tools.JSON.readValue(new URL("http://zhabdex.ovi.by/status"),
+                Tools.JSON.getTypeFactory().constructCollectionType(List.class, Service.class));
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
+        var collection =
+                new SortedCollection<>(Service::getRequestsForUptime).compose(
+                        new TableViewCollection<>("Test", List.of(
+                                TableViewCollection.ColumnProvider
+                                        .of("Name", Service::getName),
+                                TableViewCollection.ColumnProvider
+                                        .of("Data center", Service::getDataCenter),
+                                TableViewCollection.ColumnProvider
+                                        .of("Ping", Service::getAveragePing),
+                                TableViewCollection.ColumnProvider
+                                        .of("Available nodes", Service::getNodesCount),
+                                TableViewCollection.ColumnProvider
+                                        .of("Requests/sec", Service::getRequestsPerSecond),
+                                TableViewCollection.ColumnProvider
+                                        .of("Started time", Service::getStartedTime),
+                                TableViewCollection.ColumnProvider
+                                        .of("Current time", Service::getCurrentTime)
+                        ))
+                );
+
         TerminalRenderer renderer = TerminalRenderer.init(1);
-        System.out.println(renderer);
         while (true) {
-            List<Service> services;
             try {
-                 services = Tools.JSON.readValue(new URL("http://zhabdex.ovi.by/status"),
-                         Tools.JSON.getTypeFactory().constructCollectionType(List.class, Service.class));
-                 renderer.render(List.of(generateTableRow(services)));
+                collection.renew(fetchServices());
+                renderer.render(List.of(collection.currentState()));
             } catch (Exception e) {
                 e.printStackTrace();
                 renderer.render(List.of(new Table("Server DEAD").addRow("Server DEAD")));
             }
+
             Thread.sleep(1000);
-            // TODO(Jora) fix exit on render close
         }
+        // Todo(George) Fix exit on render close
     }
 }
