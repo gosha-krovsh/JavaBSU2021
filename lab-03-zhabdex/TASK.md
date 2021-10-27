@@ -32,7 +32,7 @@
 
 У вас должно получиться примерно следующее:
 
-![Главный офис компании Zhabdex](
+![Zhabdex monitoring](
 https://i.ibb.co/ZhXHhHt/zhabdex.gif)
 
 #### Инструменты
@@ -147,6 +147,7 @@ while (true) {
 * Мы лишь 1 раз задаем весь pipe-line обработки данных, а не делаем это каждый раз когда обновились данные. Иногда это очень удобно.
 * Если данные обновляются не полностью, а частично, можно проводить некоторые оптимизации и не пересчитывать то, что не надо.
 * Например, если мы считаем средний ping по датацентрам, у нас обновилась информация только о 4 сервисах из 1000, можно решить задачу 4x операций, а не 1000x.
+* Эту систему коллекций можно расширять, когда в stream api ограниченный набор функций. 
 
 ### Базовые интерфейсы
 
@@ -162,7 +163,7 @@ public interface FinalProcessedCollection<T, E> {
 ```java
 
 public interface ProcessedCollection<T, E> extends 
-        FinalProcessableCollection<T, Collection<? extends E>> {}
+        FinalProcessedCollection<T, Collection<? extends E>> {}
 ```
 
 Будем называть все наши "умные" коллекции `processed collection`. Для такого не очень просто придумать название, так что можете предлагать идеи.
@@ -199,7 +200,7 @@ public interface ProcessedCollection<T, E> extends
 ##### Пример
 
 ```java
-FilteredCollection<Integer> collection 
+MappedCollection<Integer> collection 
         = new MappedCollection<>((Integer a) -> "Number is " + a.toString());
 
 collection.renew(List.of(4, 5, 6, 7));
@@ -235,6 +236,26 @@ collection.currentState().forEach(System.out::println);
 */
 ```
 
+#### LimitedCollection
+
+Конструктор принимает `long maxSize` - максимальное количество элементов в коллекции.
+
+##### Пример
+
+```java
+LimitedCollection<Integer> collection
+        = new LimitedCollection<>(2);
+
+collection.renew(List.of(4, 5, 6, 7));
+collection.currentState().forEach(System.out::println);
+
+/**
+Вывод:
+    4
+    5
+*/
+```
+
 #### ReducedCollection
 
 Конструктор принимает `BinaryOperator<T> reducer` - функция, которая принимает два аргумента и возвращает результат выполнения операции над ними. Например, для нахождения суммы всех чисел следует использовать `(x, y) -> x + y`.
@@ -257,25 +278,8 @@ System.out.println(collection.currentState().get());
 */
 ```
 
-#### LimitedCollection
-
-Конструктор принимает `long maxSize` - максимальное количество элементов в коллекции.
-
-##### Пример
-
-```java
-LimitedCollection<Integer> collection
-        = new LimitedCollection<>(2);
-
-collection.renew(List.of(4, 5, 6, 7));
-collection.currentState().forEach(System.out::println);
-
-/**
-Вывод:
-    4
-    5
-*/
-```
+##### Помощь
+Скорее всего, вы попробовали вызвать функцию `reduce` из **streamapi** на *Collection<? extends T>* и передали туда оператор *BiOperator<? extends T>*. Обдумайте, почему это не может скомпилироваться и найдите решение. Проблема возникает при подстановке в реализацию `reduce` типа *? extends T*. Если сразу не очевидно, попробуйте реализовать свой *reduce* и найти в нем логическую ошибку при подстановке типа *? extends T*. После решения проблемы, оставьте там комментарий, который объясняет проблему и ее решение.
 
 #### ReversedCollection
 
@@ -298,13 +302,250 @@ collection.currentState().forEach(System.out::println);
 
 #### SortedCollection
 
-_Comming soon_
+* Конструктор 1 принимает `Comparator comparator`.
+* Конструктор 2 принимаает `Function keyExtractor` - функцию, которая извлекает из исходного объекта ключ и сравнивает по нему (см. Пример 1)
+* Конструктор 3 принимает `Function keyExtractor` и `bool reversed` - нужно ли сортировать в обратном порядке.
+
+##### Пример 1
+
+```java
+SortedCollection<Service> collection 
+        = new SortedCollection<>(Service::getNodesCount);
+
+collection.renew(fetchServices());
+collection.currentState().forEach(service -> System.out.println(service.getNodesCount()));
+
+/**
+Вывод:
+    10
+    27
+    96
+*/
+```
+
+##### Пример 2
+
+```java
+SortedCollection<Service> collection
+        = new SortedCollection<>((first, second) -> second.getNodesCount() - first.getNodesCount());
+
+collection.renew(fetchServices());
+collection.currentState().forEach(service -> System.out.println(service.getNodesCount()));
+
+/**
+Вывод:
+    96
+    27
+    10
+*/
+```
 
 ### Юнит тесты
-Для всех коллекций сделайте хотя бы по несколько (одному) простых тестов
+Для всех коллекций сделайте хотя бы по несколько (одному) простых тестов.
 
 ### Объединение коллекций
-_Comming soon_
+
+Мы разработали крутые коллекции, но что, если нужно поддерживать суммарное количество Node в 3 сервисах с самым большим RPS? Для этого нужно научиться объединять коллекции.
+
+В `ProcessedCollection` добавьте **default** функцию `compose`, которая будет принимать другой `ProcessedCollection` и возвращать их "объединенную версию". Обозначим эти коллекции как **A** и **B**, т. e. функция `compose` действут следующим образом: **A**.compose(**B**). Результатом этой функции должна быть коллекция **C**, которая имеет такой же вход, как **A**, а выход как **B**. Т.e. если бы мы рассматривали **A** и **B** как функции, то **C** была бы их композицией - **C(t) = B(A(t))**
+
+Аналогичным образом добавьте в `ProcessedCollection` функцию `compose`, которая принимает `FinalProcessedCollection`.
+
+**На FinalProcessedCollection вызвать функцию compose нельзя.**
+
+##### Пример
+
+Ищем суммарный rps в топ 3 сервисах по количеству node из датацентра "Chaplin".
+
+```java
+FinalProcessedCollection<Service, Optional<Long>> collection =
+        new FilteredCollection<Service>(service -> service.getDataCenter().equals("Chaplin"))
+        .compose(new SortedCollection<>(Service::getNodesCount))
+        .compose(new LimitedCollection<>(3))
+        .compose(new MappedCollection<>(Service::getRequestsPerSecond))
+        .compose(new ReducedCollection<>(Long::sum));
+
+collection.renew(fetchServices());
+System.out.println(collection.currentState());
+
+/**
+Вывод:
+    407
+*/
+```
+
+
+### TableViewCollection
+
+Сделайте коллекцию `TableViewCollection implements FinalProcessedCollection`, которая будет превращать элементы в **Table** из библиотеки `visualizer`.
+
+Конструктор принимает `String tableName` - название таблицы, `List<ColumnProvider>` - информацию о колонках таблицы.
+
+`ColumnProvider` - nested class `TableViewCollection`. Его **приватный** конструктор принимает `String title` - название колонки и `Function fieldExtractor` - функцию, которая принимает объект коллекции и возвращает его поле. 
+Для конструирования `ColumnProvider` следует сделать **публичный** статический метод `of`, который будет вызывать **приватный** конструктор.
+
+##### Пример
+```java 
+var collection =
+    new SortedCollection<>(Service::getRequestsForUptime).compose(
+    new TableViewCollection<>("Test", List.of(
+            TableViewCollection.ColumnProvider.of("Name", Service::getName),
+            TableViewCollection.ColumnProvider.of("Data center", Service::getDataCenter),
+            TableViewCollection.ColumnProvider.of("Ping", Service::getAveragePing),
+            TableViewCollection.ColumnProvider.of("Available nodes", Service::getNodesCount),
+            TableViewCollection.ColumnProvider.of("Requests/sec", Service::getRequestsPerSecond),
+            TableViewCollection.ColumnProvider.of("Started time", Service::getStartedTime),
+            TableViewCollection.ColumnProvider.of("Current time", Service::getCurrentTime)
+        ))
+    );
+
+collection.renew(fetchServices());
+
+TerminalRenderer renderer = TerminalRenderer.init(1);
+renderer.render(List.of(collection.currentState()));
+```
+
+##### Результат
+
+![Zhabdex monitoring](
+https://i.ibb.co/ZhXHhHt/zhabdex.gif)
+
+### GroupingCollection
+
+Сделайте коллекцию `GroupingCollection implements ProcessableCollection<T, Map.Entry<? extends K, ? extends List<? extends T>>>`, которая будет группировать элементы по какому-то общему признаку.
+
+Конструктор принимает `Function classifier<? super T, ? extends K>`.
+
+##### Пример
+```java 
+var collection =
+    new AggregatedCollection<>(Service::getDataCenter)
+        .concat(
+            new MappedCollection<>(
+                entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().stream().mapToLong(Service::getRequestsPerSecond).sum())
+            )
+        ).concat(
+            new TableViewCollection<>("Summary ping", List.of(
+                TableViewCollection.ColumnProvider.of("Name", Map.Entry::getKey),
+                TableViewCollection.ColumnProvider.of("Available nodes", Map.Entry::getValue)
+            ))
+        );
+
+collection.renew(fetchServices());
+
+TerminalRenderer renderer = TerminalRenderer.init(1);
+renderer.render(List.of(collection.currentState()));
+```
+
 
 ### Используем библиотеку
-_Comming soon..._
+Теперь используя написанную библиотеку, сделайте несколько мониторингов. Например, суммарный RPS в каждом из дата-центров и т. д.
+
+### Фреймворк для мониторингов
+
+Сейчас добавлять новые мониторинги не очень удобно. Сделаем небольшой фреймворк, который абстрагирует нас от отображения таблиц.
+
+Код фреймворка должен находится в пакете `monitoring_lib`.
+
+С помощью этого фреймворка для добавления мониторинга достаточно будет сделать класс, который реализует интерфейс `Monitoring` и аннотирован аннотацией `@ActiveMonitoring`.
+
+#### Пример 1
+
+```java
+@ActiveMonitoring
+public class PingMonitoring implements Monitoring {
+    FinalProcessableCollection<Service, Table> collection =
+        new SortedCollection<>(Service::getAveragePing).concat(
+        new TableViewCollection<>("Ping monitoring", List.of(
+                TableViewCollection.ColumnProvider.of("Name", Service::getName),
+                TableViewCollection.ColumnProvider.of("Data center", Service::getDataCenter),
+                TableViewCollection.ColumnProvider.of("Ping", Service::getAveragePing),
+                TableViewCollection.ColumnProvider.of("Requests/sec", Service::getRequestsPerSecond),
+                TableViewCollection.ColumnProvider.of("Started time", Service::getStartedTime),
+                TableViewCollection.ColumnProvider.of("Current time", Service::getCurrentTime)
+          )));
+
+    @Override
+    public void update(Collection<? extends Service> services) {
+        collection.renew(services);
+    }
+
+    @Override
+    public Table getStatistics() {
+        return collection.currentState();
+    }
+}
+```
+
+Таким образом, фрейворк должен найти в заданном пакете все классы, которые аннотированы аннотацией `@ActiveMonitoring` и реализуют интерфейс `Monitoring`.
+
+Интерфейс `Monitoring` содердит методы `update(), getStatistics()`, сигнатуру которых можно узнать из примера выше.
+
+Запуск приложения, которое написано с помощью фреймворка должен выглядеть следующим образом:
+
+```java
+public class Main {
+    public static void main(String[] args) throws Exception {
+        MonitoringApplication
+            .builder()
+            .package("by.zhabdex.my_monitoring")
+            .serviceURL("http://zhabdex.ovi.by/status")
+            .addScanner(new ClassMonitoringScanner())
+            .addScanner(new ContainerMonitoringScanner())
+            .start();
+    }
+}
+```
+
+* `MonitoringApplication` - основной класс фреймворка, который сканирует все мониторинги в заданном пакете, раз в секунду отправляет запрос к сервису, затем обновляет информацию во мониторингах и с помощью библиотеки отображает таблицы.
+* `ClassMonitoringScanner`, `ContainerMonitoringScanner` - классы, которые ищут декларированные мониторинги в пакете, от них ниже.
+* `package` - пакет, в котором находятся мониторинги.
+
+Для поиска классов в пакете, которые аннотированы `@ActiveMonitoring` следует воспользоваться библиотекой `Reflections`. Она уже подключена в `build.gradle` модуля `common`. Это значит, что вам достаточно спулить последнюю версию репозитория и уже можно будет использовать у себя в проекте или самостоятельно добавить ее в `build.gradle`. 
+
+Гайд по использованию библиотеки: https://clck.ru/YUYTm
+
+`MonitoringApplication` будет не сам искать мониторинги в пакете, этот код будет находится в реализациях интерфейса `MonitoringScanner`.
+
+```java
+@FunctionalInterface
+public interface MonitoringScanner {
+    Collection<Monitoring> scan(Reflections reflection);
+}
+```
+
+`ClassMonitoringScanner` - `MonitoringScanner`, который находит в пакете все мониторинги, которые реализуют интерфейс `Monitoring` и аннотированы аннотацией `@ActiveMonitoring`. **(см. Пример 1)**
+
+`ContainerMonitoringScanner` - `MonitoringScanner`, который находит все классы, которые аннотированы аннотацией `@MonitoringContainer`, в нем находит все методы, которые аннотированы аннотацией `@ActiveMonitoring` и возвращают либо `Monitoring`, либо `FinalProcessableCollection<Service, Table>` и в таком случае мониторинг создается используя внутри коллекцию, которая создается в результате вызова метода **(см. Пример 2)**
+
+### Пример 2
+
+```java
+@MonitoringContainer
+public class Container {
+    @ActiveMonitoring
+    static FinalProcessableCollection<Service, Table> top2Nodes() {
+        return new SortedCollection<>(Service::getNodesCount)
+            .concat(new LimitedCollection<>(2))
+            .concat(new TableViewCollection<>("top nodes", List.of(
+                    TableViewCollection.ColumnProvider.of("Name", Service::getName),
+                    TableViewCollection.ColumnProvider.of("Available nodes", Service::getNodesCount)
+            )));
+    }
+
+    @ActiveMonitoring
+    static FinalProcessableCollection<Service, Table> summaryPing() {
+        return new AggregatedCollection<>(Service::getDataCenter)
+            .concat(
+                new MappedCollection<>(
+                    entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().stream().mapToLong(Service::getRequestsPerSecond).sum())
+                )
+            ).concat(
+                new TableViewCollection<>("Summary ping", List.of(
+                    TableViewCollection.ColumnProvider.of("Name", Map.Entry::getKey),
+                    TableViewCollection.ColumnProvider.of("Available nodes", Map.Entry::getValue)
+                ))
+            );
+    }
+}
+```
