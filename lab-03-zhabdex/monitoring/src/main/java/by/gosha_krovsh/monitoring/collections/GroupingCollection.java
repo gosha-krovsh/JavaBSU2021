@@ -13,13 +13,13 @@ public class GroupingCollection<T, K> implements
 
     @Override
     public void renew(Collection<? extends T> elements) {
-        for (var element : elements) {
+        elements.forEach(element -> {
             var key = classifier.apply(element);
             if (!map.containsKey(key)) {
                 map.put(key, new ArrayList<>());
             }
             map.get(key).add(element);
-        }
+        });
     }
 
     @Override
