@@ -5,29 +5,29 @@ import java.util.Collection;
 public interface ProcessedCollection<T, E>
         extends FinalProcessedCollection<T, Collection<? extends E>> {
 
-    default ProcessedCollection<T, E> compose(ProcessedCollection<T, E> collection) {
+    default <U> ProcessedCollection<T, U> compose(ProcessedCollection<E, U> collection) {
         ProcessedCollection<T, E> object = this;
-        return new ProcessedCollection<T, E>() {
+        return new ProcessedCollection<T, U>() {
             @Override
             public void renew(Collection<? extends T> elements) {
                 object.renew(elements);
-                collection.renew((Collection<? extends T>) object.currentState());
+                collection.renew(object.currentState());
             }
 
             @Override
-            public Collection<? extends E> currentState() {
+            public Collection<? extends U> currentState() {
                 return collection.currentState();
             }
         };
     }
 
-    default <U> FinalProcessedCollection<T, U> compose(FinalProcessedCollection<T, U> collection) {
+    default <U> FinalProcessedCollection<T, U> compose(FinalProcessedCollection<E, U> collection) {
         ProcessedCollection<T, E> object = this;
         return new FinalProcessedCollection<T, U>() {
             @Override
             public void renew(Collection<? extends T> elements) {
                 object.renew(elements);
-                collection.renew((Collection<? extends T>) object.currentState());
+                collection.renew(object.currentState());
             }
 
             @Override

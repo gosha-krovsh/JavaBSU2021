@@ -10,24 +10,22 @@ import java.util.stream.Collectors;
 
 public class TableViewCollection<T> implements FinalProcessedCollection<T, Table> {
     public static class ColumnProvider<U> {
-        private <R> ColumnProvider(String title, Function<U, R> extractor) {
+        private ColumnProvider(String title, Function<U, ?> extractor) {
             this.title = title;
-            this.extractor = (U t) -> {
-                return extractor.apply(t).toString();
-            };
+            this.extractor = extractor;
         }
 
-        public static <T, R> ColumnProvider<T> of(String title, Function<T, R> extractor) {
+        public static <T> ColumnProvider<T> of(String title, Function<T, ?> extractor) {
             return new ColumnProvider<T>(title, extractor);
         }
 
         public String Apply(U t) {
-            return extractor.apply(t);
+            return extractor.apply(t).toString();
         }
 
         @Getter
         private final String title;
-        private Function<U, String> extractor;
+        private Function<U, ?> extractor;
     }
 
     public TableViewCollection(String title, List<ColumnProvider<T>> providers) {
