@@ -1,13 +1,12 @@
-package by.gosha_krovsh.quizer;
+package by.gosha_krovsh.quizer_cli;
 
-/* TEST CODE
+import by.gosha_krovsh.quizer.Quiz;
+import by.gosha_krovsh.quizer.Task;
+
 import java.util.HashMap;
 import java.util.Scanner;
-*/
 
-@Deprecated
 public class Main {
-    /* TEST CODE, LEFT HERE TO SAVE IT
     public static void main(String[] args) {
         HashMap<String, Quiz> quizMap = Quiz.getQuizMap();
         for (var name : quizMap.keySet()) {
@@ -29,8 +28,6 @@ public class Main {
             String answer = scanner.nextLine();
             System.out.println(quiz.provideAnswer(answer));
         }
-        quiz.getOutcomes().forEach(System.out::println);
         System.out.println(quiz.getMark());
     }
-    */
 }
