@@ -13,6 +13,7 @@ public class GroupingCollection<T, K> implements
 
     @Override
     public void renew(Collection<? extends T> elements) {
+        map.clear();
         elements.forEach(element -> {
             var key = classifier.apply(element);
             if (!map.containsKey(key)) {
