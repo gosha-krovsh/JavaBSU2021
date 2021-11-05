@@ -424,7 +424,7 @@ var collection =
             new MappedCollection<>(
                 entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().stream().mapToLong(Service::getRequestsPerSecond).sum())
             )
-        ).compose(a
+        ).compose(
             new TableViewCollection<>("Summary ping", List.of(
                 TableViewCollection.ColumnProvider.of("Name", Map.Entry::getKey),
                 TableViewCollection.ColumnProvider.of("Available nodes", Map.Entry::getValue)
