@@ -52,7 +52,9 @@ public class MonitoringApplication {
             try {
                 fetchServices();
                 updateMonitoring();
-                tables = monitoringList.stream().map(Monitoring::getStatistics).collect(Collectors.toList());
+                tables = monitoringList.stream()
+                        .map(Monitoring::getStatistics)
+                        .collect(Collectors.toList());
 
                 renderer.render(tables);
             } catch (IOException exception) {
