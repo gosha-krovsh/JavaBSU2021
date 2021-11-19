@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" th:href="@{css/index_styles.css}">
+
+  <title>Sessions</title>
+</head>
+<body>
+
+<p class="head">10 Last Sessions</p>
+
+<table class="styled-table">
+  <tr>
+    <td class="table-header">Manufacturer</td>
+    <td class="table-header">Model</td>
+    <td class="table-header">Generation</td>
+  </tr>
+  <tr th:each="car : ${cars}">
+    <td th:text="${car.getManufacturer()}"/>
+    <td th:text="${car.getModel()}"></td>
+    <td th:text="${car.getGeneration()}"></td>
+  </tr>
+</table>
+</body>
+</html>
