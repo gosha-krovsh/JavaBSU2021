@@ -15,7 +15,7 @@ public class Track {
     int id;
 
     String name;
-    String photo;
+    String image;
     String location;
-    int record;
+    Integer record;
 }

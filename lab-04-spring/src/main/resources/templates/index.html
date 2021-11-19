@@ -14,14 +14,22 @@
 
 <table class="styled-table">
   <tr>
-    <td class="table-header">Manufacturer</td>
-    <td class="table-header">Model</td>
-    <td class="table-header">Generation</td>
+    <td class="table-header">Track</td>
+    <td class="table-header">Time</td>
+    <td class="table-header">Date</td>
+    <td class="table-header">Conditions</td>
+    <td class="table-header">Car</td>
+    <td class="table-header">Tyres</td>
+    <td class="table-header">Description</td>
   </tr>
-  <tr th:each="car : ${cars}">
-    <td th:text="${car.getManufacturer()}"/>
-    <td th:text="${car.getModel()}"></td>
-    <td th:text="${car.getGeneration()}"></td>
+  <tr th:each="trackSession : ${sessions}">
+    <td th:text="${trackSession.getTrack().getName()}"/>
+    <td th:text="${trackSession.getFormatedTime()}"></td>
+    <td th:text="${trackSession.getDate_time()}"></td>
+    <td th:text="${trackSession.getConditions()}"></td>
+    <td th:text="${trackSession.getCar().getName()}"></td>
+    <td th:text="${trackSession.getTyre()}"></td>
+    <td></td>
   </tr>
 </table>
 </body>

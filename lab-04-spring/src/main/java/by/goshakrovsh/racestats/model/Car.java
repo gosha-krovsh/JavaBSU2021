@@ -17,4 +17,8 @@ public class Car {
     String manufacturer;
     String model;
     String generation;
+
+    public String getName() {
+        return manufacturer + " " + model;
+    }
 }
