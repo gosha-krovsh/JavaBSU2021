@@ -13,6 +13,7 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+
     String manufacturer;
     String model;
     String generation;

@@ -24,17 +24,23 @@ public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
+
     @ManyToOne
     @JoinColumn(name = "track_id")
     private Track track;
+
     private int time;
+
     @Column(columnDefinition = "timestamp(3)")
     private Timestamp date_time;
+
     private Tyre tyre;
     private Conditions conditions;
+
     @Column(columnDefinition = "text")
     private String description;
 }

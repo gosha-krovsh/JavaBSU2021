@@ -13,6 +13,7 @@ public class Track {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+
     String name;
     String photo;
     String location;
