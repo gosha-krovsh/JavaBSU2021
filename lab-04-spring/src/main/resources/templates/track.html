@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<p style="text-align: center;" th:text="${track.getName()}" />
+
+<div>
+    <b>Location: </b><span th:text="${track.getLocation()}" /> <br>
+    <b>Record: </b><span th:text="${track.getRecord()}" />
+</div>
+
+<div style="text-align: center;">
+<img th:src="${track.getImage()}">
+</div>
+
+</body>
+</html>

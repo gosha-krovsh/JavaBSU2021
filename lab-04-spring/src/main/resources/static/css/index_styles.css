@@ -6,6 +6,10 @@
     font-family: 'Ubuntu', sans-serif;
 }
 
+.row {
+    display: inline-block;
+}
+
 /* Table */
 .table-header{
     font-size: 1.1em;
@@ -21,7 +25,6 @@
     width: 90%;
 
     border-collapse: collapse;
-    /*margin: 25px 0;*/
     font-size: 0.9em;
     font-family: sans-serif;
     min-width: 400px;
