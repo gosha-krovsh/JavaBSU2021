@@ -13,8 +13,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/secret").hasRole("ADMIN")
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/admin").hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .permitAll()
@@ -30,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails user = User
                 .withDefaultPasswordEncoder()
                 .username("jorra")
-                .roles("ADMIN").password("gonshiknelegalni")
+                .roles("ADMIN")
+                .password("gonshiknelegalni")
                 .build();
         return new InMemoryUserDetailsManager(user);
     }

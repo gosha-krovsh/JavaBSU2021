@@ -1,6 +1,5 @@
 package by.goshakrovsh.racestats;
 
-import by.goshakrovsh.racestats.model.Session;
 import by.goshakrovsh.racestats.repositories.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +11,13 @@ public class MainController {
     @Autowired
     SessionRepository sessionRepository;
 
+    @Autowired
+    SessionsService service;
+
     @GetMapping("/")
     String startPage(Model model) {
-        model.addAttribute("sessions", sessionRepository.findAll());
+        model.addAttribute("sessions",
+                service.getLast10Sessions());
         return "index";
     }
 }
