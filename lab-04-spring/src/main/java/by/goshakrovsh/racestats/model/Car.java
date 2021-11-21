@@ -10,12 +10,23 @@ import javax.persistence.*;
 @Entity
 @Table(name = "cars")
 public class Car {
+    public Car(String manufacturer,
+               String model,
+               String generation) {
+        this.manufacturer = manufacturer;
+        this.model = model;
+        this.generation = generation;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     int id;
 
+    @Column(columnDefinition = "varchar(255) NOT NULL")
     String manufacturer;
+    @Column(columnDefinition = "varchar(255) NOT NULL")
     String model;
+    @Column(columnDefinition = "varchar(255) DEFAULT ''")
     String generation;
 
     public String getName() {

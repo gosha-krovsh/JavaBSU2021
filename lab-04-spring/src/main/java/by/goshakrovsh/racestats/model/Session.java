@@ -2,11 +2,9 @@ package by.goshakrovsh.racestats.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 @Entity
 @NoArgsConstructor
@@ -45,7 +43,7 @@ public class Session {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @ManyToOne
@@ -56,14 +54,17 @@ public class Session {
     @JoinColumn(name = "track_id")
     private Track track;
 
-    private int time;
+    @Column(columnDefinition = "NOTNULL")
+    private Integer time;
 
-    @Column(columnDefinition = "timestamp(3)")
+    @Column(columnDefinition = "timestamp(3) NOTNULL")
     private Timestamp date_time;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "DEFAULT 'slick'")
     private Tyre tyre;
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "DEFAULT 'dry'")
     private Conditions conditions;
 
     @Column(columnDefinition = "text")
