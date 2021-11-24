@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .and()
                 .formLogin()
+                .loginPage("/login")
                 .permitAll()
                 .and()
                 .logout()
@@ -30,9 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected UserDetailsService userDetailsService() {
         UserDetails user = User
                 .withDefaultPasswordEncoder()
-                .username("jorra")
+                .username("gonshik")
                 .roles("ADMIN")
-                .password("gonshiknelegalni")
+                .password("nelegalni")
                 .build();
         return new InMemoryUserDetailsManager(user);
     }

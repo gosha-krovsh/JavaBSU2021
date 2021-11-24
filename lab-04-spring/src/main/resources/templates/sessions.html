@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<p class="head">Last Sessions</p>
+<p class="head">Sessions</p>
 
 <table class="styled-table">
     <tr>
@@ -34,38 +34,14 @@
         <td th:text="${trackSession.getConditions()}"></td>
         <td th:text="${trackSession.getCar().getName()}"></td>
         <td th:text="${trackSession.getTyre()}"></td>
-        <td th:text="${trackSession.getDescription()}"></td>
+        <td></td>
     </tr>
 </table>
 
 <div style="text-align:center; margin-top: 1%;">
-    <div class="row">
-        <a href="/sessions">
-            <button class="main_button">All Sessions</button>
-        </a>
-    </div>
-    <div class="row">
-        <a href="/cars">
-            <button class="main_button">Cars</button>
-        </a>
-    </div>
-    <div class="row">
-        <a href="/tracks">
-            <button class="main_button">Tracks</button>
-        </a>
-    </div>
-
-    <div style="margin-top: 1%;">
-        <a href="/json">
-            <button class="black_button">Json</button>
-        </a>
-    </div>
-
-    <div style="margin-top: 1%;">
-        <a href="/admin">
-            <button class="main_button">Admin Panel</button>
-        </a>
-    </div>
+    <a href="/">
+        <button class="main_button">Return</button>
+    </a>
 </div>
 
 </body>

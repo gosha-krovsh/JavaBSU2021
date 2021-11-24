@@ -1,5 +1,6 @@
-package by.goshakrovsh.racestats;
+package by.goshakrovsh.racestats.controllers;
 
+import by.goshakrovsh.racestats.SessionsService;
 import by.goshakrovsh.racestats.model.Session;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/json")

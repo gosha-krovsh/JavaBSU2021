@@ -1,20 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+
+    <link rel="stylesheet" th:href="@{../css/index_styles.css}">
+    <link rel="stylesheet" th:href="@{../css/button_styles.css}">
+
+    <title>Track</title>
 </head>
 <body>
 
-<p style="text-align: center;" th:text="${track.getName()}" />
+<p class="head" th:text="${track.getName()}"/>
 
 <div>
     <b>Location: </b><span th:text="${track.getLocation()}" /> <br>
-    <b>Record: </b><span th:text="${track.getRecord()}" />
+    <b>Record: </b><span th:text="${track.getFormatedRecord()}" />
 </div>
 
 <div style="text-align: center;">
-<img th:src="${track.getImage()}">
+    <img th:src="${track.getImage()}" alt="Track Image">
+</div>
+
+<div style="text-align:center; margin-top: 1%;">
+    <a href="/">
+        <button class="black_button">Start Page</button>
+    </a>
 </div>
 
 </body>

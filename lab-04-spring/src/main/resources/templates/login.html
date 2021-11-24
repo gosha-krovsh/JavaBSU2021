@@ -3,19 +3,46 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{css/login_styles.css}">
+    <link rel="stylesheet" th:href="@{css/button_styles.css}">
+
     <title>Login</title>
 </head>
 <body>
 
+<!--<form method="post">-->
+<!--    <div class="container">-->
+<!--        <label for="username"><b>Username</b></label>-->
+<!--        <input type="text" placeholder="Enter Username" name="username" required>-->
+<!--        <label for="password"><b>Password</b></label>-->
+<!--        <input type="password" placeholder="Enter Password" name="password" required>-->
+<!--        <button style="color: orangered" type="submit">Login</button>-->
+<!--    </div>-->
+<!--</form>-->
+
+<!--<h1>Nice input box</h1>-->
+<div class="container">
+
 <form method="post">
-    <div class="container">
-        <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
-        <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
-        <button style="color: orangered" type="submit">Login</button>
+    <div class="group">
+        <input type="text" required name="username">
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Name</label>
     </div>
+
+    <div class="group">
+        <input type="password" required name="password">
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Password</label>
+    </div>
+
+    <input type="Submit" value="Submit!" class="main_button">
 </form>
+
+</div>
 
 </body>
 </html>

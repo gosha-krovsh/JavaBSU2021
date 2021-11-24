@@ -1,4 +1,4 @@
-package by.goshakrovsh.racestats;
+package by.goshakrovsh.racestats.controllers;
 
 import by.goshakrovsh.racestats.repositories.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;

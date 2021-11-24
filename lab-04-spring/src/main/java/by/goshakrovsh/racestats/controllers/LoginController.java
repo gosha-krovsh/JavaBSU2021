@@ -1,4 +1,4 @@
-package by.goshakrovsh.racestats;
+package by.goshakrovsh.racestats.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

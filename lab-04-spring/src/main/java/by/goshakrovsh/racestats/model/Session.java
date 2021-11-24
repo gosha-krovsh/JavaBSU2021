@@ -2,8 +2,10 @@ package by.goshakrovsh.racestats.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 @Entity
@@ -12,9 +14,9 @@ import java.sql.Timestamp;
 @Table(name = "sessions")
 public class Session {
     public enum Tyre {
-        slick("SLICK"),
-        semi_slick("SEMI-SLICK"),
-        road_tyre("ROAD-TYRE");
+        Slick("Slick"),
+        SemiSlick("SemiSlick"),
+        RoadTyre("RoadTyre");
 
         private String name;
         Tyre(String name) {
@@ -26,10 +28,10 @@ public class Session {
             return name;
         }
     }
-    public enum Conditions {
-        dry("DRY"),
-        wet("WET");
 
+    public enum Conditions {
+        Dry("Dry"),
+        Wet("Wet");
 
         private String string;
         Conditions(String string) {
@@ -54,23 +56,28 @@ public class Session {
     @JoinColumn(name = "track_id")
     private Track track;
 
-    @Column(columnDefinition = "NOTNULL")
+    @NotNull
     private Integer time;
 
-    @Column(columnDefinition = "timestamp(3) NOTNULL")
+    @Column(columnDefinition = "timestamp(3)")
+    @NotNull
     private Timestamp date_time;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "DEFAULT 'slick'")
+    @Type(type = "by.goshakrovsh.racestats.enum_mapping.EnumTypePostgreSql")
     private Tyre tyre;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "DEFAULT 'dry'")
+    @Type(type = "by.goshakrovsh.racestats.enum_mapping.EnumTypePostgreSql")
     private Conditions conditions;
 
     @Column(columnDefinition = "text")
     private String description;
 
-    public String getFormatedTime() {
+    public String getDescription() {
+        return description == null ? "" : description;
+    }
+
+    public String getFormatTime() {
         int minutes = time / (60 * 1000);
         int seconds = (time - minutes * 60 * 1000) / 1000;
         int milliseconds = time - minutes * 60 * 1000 - seconds * 1000;
@@ -79,5 +86,16 @@ public class Session {
                 + (milliseconds < 10 ? "00" + milliseconds :
                     milliseconds < 100 ? "0" + milliseconds : milliseconds);
     }
-}
 
+    public void setFormatTime(String time) {
+        var splitedString = time.split(":");
+        try {
+            this.time = 0;
+            this.time += Integer.parseInt(splitedString[0]) * 1000 * 60;
+            this.time += Integer.parseInt(splitedString[1]) * 1000;
+            this.time += Integer.parseInt(splitedString[2]);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+}

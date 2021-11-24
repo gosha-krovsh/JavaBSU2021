@@ -20,4 +20,11 @@ public class MainController {
                 service.getLast10Sessions());
         return "index";
     }
+
+    @GetMapping("/sessions")
+    String sessionPage(Model model) {
+        model.addAttribute("sessions",
+                sessionRepository.findAll());
+        return "sessions";
+    }
 }
