@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{css/index_styles.css}">
+    <link rel="stylesheet" th:href="@{css/button_styles.css}">
+
+    <title>Sessions</title>
+</head>
+<body>
+
+<p class="head">Sessions</p>
+
+<table class="styled-table">
+    <tr>
+        <td class="table-header">Track</td>
+        <td class="table-header">Time</td>
+        <td class="table-header">Date</td>
+        <td class="table-header">Conditions</td>
+        <td class="table-header">Car</td>
+        <td class="table-header">Tyres</td>
+        <td class="table-header">Description</td>
+    </tr>
+    <tr th:each="trackSession : ${sessions}">
+        <td>
+            <a th:href="|/track/${trackSession.getTrack().getId()}|" class="link"
+               th:text="${trackSession.getTrack().getName()}">
+            </a>
+        </td>
+        <td th:text="${trackSession.getFormatTime()}"></td>
+        <td th:text="${trackSession.getDate_time()}"></td>
+        <td th:text="${trackSession.getConditions()}"></td>
+        <td th:text="${trackSession.getCar().getName()}"></td>
+        <td th:text="${trackSession.getTyre()}"></td>
+        <td></td>
+    </tr>
+</table>
+
+<div style="text-align:center; margin-top: 1%;">
+    <a href="/">
+        <button class="main_button">Return</button>
+    </a>
+</div>
+
+</body>
+</html>

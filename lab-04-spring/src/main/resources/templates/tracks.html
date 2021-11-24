@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{css/index_styles.css}">
+    <link rel="stylesheet" th:href="@{css/button_styles.css}">
+
+    <title>Tracks</title>
+</head>
+<body>
+
+<p class="head">Tracks</p>
+
+<table class="styled-table">
+    <tr>
+        <td class="table-header">Name</td>
+        <td class="table-header">Location</td>
+        <td class="table-header">Record</td>
+    </tr>
+    <tr th:each="track : ${tracks}">
+        <td>
+            <a th:href="|/track/${track.getId()}|" class="link"
+               th:text="${track.getName()}">
+            </a>
+        </td>
+        <td th:text="${track.getLocation()}"></td>
+        <td th:text="${track.getFormatedRecord()}"></td>
+        <td></td>
+    </tr>
+</table>
+
+<div style="text-align:center; margin-top: 1%;">
+    <a href="/">
+        <button class="main_button">Return</button>
+    </a>
+</div>
+
+</body>
+</html>

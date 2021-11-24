@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <title>Admin Panel</title>
+</head>
+<body class="container">
+
+<p>Car</p>
+<form action="#" th:action="@{/admin/car}" method="post">
+    <div>
+        <label> Manufacturer: </label>
+        <input type="text" name="Manufacturer"/>
+    </div>
+    <div>
+        <label> Model: </label>
+        <input type="text" name="Model"/>
+    </div>
+    <div>
+        <label> Generation: </label>
+        <input type="text" name="Generation"/>
+    </div>
+    <input type="submit" style="background-color: red"/>
+</form>
+
+<p>Track</p>
+<form action="#" th:action="@{/admin/track}" method="post">
+    <div>
+        <label> Name: </label>
+        <input type="text" name="Name"/>
+    </div>
+    <div>
+        <label> Image URL: </label>
+        <input type="text" name="Image"/>
+    </div>
+    <div>
+        <label> Location: </label>
+        <input type="text" name="Location"/>
+    </div>
+    <div>
+        <label> Record: </label>
+        <input type="text" name="Record"/>
+    </div>
+    <input type="submit" style="background-color: red"/>
+</form>
+
+<p>Session</p>
+<form action="#" th:action="@{/admin/session}" method="post">
+    <div>
+        <label>Car:</label>
+        <select name="car_id">
+            <option th:each="car_ : ${cars}" th:value="${car_.getId()}" th:text="|${car_.getManufacturer()}  ${car_.getModel()}  ${car_.getGeneration()}|" />
+        </select>
+    </div>
+    <div>
+        <label>Track:</label>
+        <select name="track_id">
+            <option th:each="track_ : ${tracks}" th:value="${track_.getId()}" th:text="|${track_.getName()}|" />
+        </select>
+    </div>
+    <div>
+        <label> Lap Time: </label>
+        <input type="text" name="time" value="MM:ss:mmm"/>
+    </div>
+    <div>
+        <label> Date: </label>
+        <input type="datetime-local" name="date"/>
+    </div>
+    <div>
+        <label>Tyres:</label>
+        <select name="tyre">
+            <option th:each="tyre_ : ${allTyres}" th:value="${tyre_}" th:text="${tyre_}" />
+        </select>
+    </div>
+    <div>
+        <label>Conditions:</label>
+        <select name="conditions">
+            <option th:each="condition : ${allConditions}" th:value="${condition}" th:text="${condition}" />
+        </select>
+    </div>
+    <div>
+        <label> Description: </label>
+        <input type="text" name="description"/>
+    </div>
+    <input type="submit" style="background-color: red"/>
+</form>
+
+<div style="text-align:center; margin-top: 1%;">
+    <a href="/">
+        <button style="background-color: gray">Start Page</button>
+    </a>
+</div>
+
+</body>
+</html>

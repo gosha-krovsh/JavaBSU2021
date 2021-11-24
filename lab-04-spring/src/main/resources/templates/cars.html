@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" th:href="@{css/index_styles.css}">
+    <link rel="stylesheet" th:href="@{css/button_styles.css}">
+
+    <title>Cars</title>
+</head>
+<body>
+
+<p class="head">Cars</p>
+
+<table class="styled-table">
+    <tr>
+        <td class="table-header">Manufacturer</td>
+        <td class="table-header">Model</td>
+        <td class="table-header">Generation</td>
+    </tr>
+    <tr th:each="car : ${cars}">
+        <td th:text="${car.getManufacturer()}"/>
+        <td th:text="${car.getModel()}"></td>
+        <td th:text="${car.getGeneration()}"></td>
+        <td></td>
+    </tr>
+</table>
+
+<div style="text-align:center; margin-top: 1%;">
+    <a href="/">
+        <button class="main_button">Return</button>
+    </a>
+</div>
+
+</body>
+</html>
