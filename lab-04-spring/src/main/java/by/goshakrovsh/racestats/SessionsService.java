@@ -1,7 +1,6 @@
 package by.goshakrovsh.racestats;
 
 import by.goshakrovsh.racestats.model.Session;
-import by.goshakrovsh.racestats.model.Track;
 import by.goshakrovsh.racestats.repositories.SessionRepository;
 import by.goshakrovsh.racestats.repositories.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
